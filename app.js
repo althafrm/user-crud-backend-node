@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
+
 const controller = require('./controller');
+
+const app = express();
 
 app.use(cors());
 app.use(
@@ -11,17 +13,28 @@ app.use(
 );
 
 app.use(express.json());
+
 app.get('/users', (req, res) => {
-    controller.getUsers(users => {
-        res.send(users);
+    controller.getUsers((req, res, next) => {
+        res.send();
     });
 });
 
-app.get('/user', (req, res) => {
-    const id = req.query.id;
+app.post('/createuser', (req, res) => {
+    controller.addUser(req.body, (callback) => {
+        res.send();
+    });
+});
 
-    controller.getUserById(id, user => {
-        res.send(user);
+app.post('/updateuser', (req, res) => {
+    controller.updateUser(req.body, (callback) => {
+        res.send(callback);
+    });
+});
+
+app.post('/deleteuser', (req, res) => {
+    controller.deleteUser(req.body, (callback) => {
+        res.send(callback);
     });
 });
 
